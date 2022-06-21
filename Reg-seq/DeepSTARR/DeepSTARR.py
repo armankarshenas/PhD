@@ -54,7 +54,44 @@ def Spearman(y_true, y_pred):
      return ( tf.py_function(spearmanr, [tf.cast(y_pred, tf.float32),
                        tf.cast(y_true, tf.float32)], Tout = tf.float32) )
 
+print("Downloading fasta files ...")
+# FASTA files with DNA sequences of genomic regions from train/val/test sets
+#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Train.fa'
+#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Val.fa'
+#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Test.fa'
 
+# Files with developmental and housekeeping activity of genomic regions from train/val/test sets
+#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Train.txt'
+#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Val.txt'
+#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Test.txt'
+
+print("Reading in the inputs ... ")
+# Data for train/val/test sets
+X_train_sequence, X_train_seq_matrix, X_train, Y_train = prepare_input("Train")
+X_valid_sequence, X_valid_seq_matrix, X_valid, Y_valid = prepare_input("Valid")
+X_test_sequence, X_test_seq_matrix, X_test, Y_test = prepare_input("Test")
+    
+print("Setting training parameters ...")
+
+params = {'batch_size': 128,
+          'epochs': 100,
+          'early_stop': 10,
+          'kernel_size1': 7,
+          'kernel_size2': 3,
+          'kernel_size3': 5,
+          'kernel_size4': 3,
+          'lr': 0.002,
+          'num_filters': 256,
+          'num_filters2': 60,
+          'num_filters3': 60,
+          'num_filters4': 120,
+          'n_conv_layer': 4,
+          'n_add_layer': 2,
+          'dropout_prob': 0.4,
+          'dense_neurons1': 256,
+          'dense_neurons2': 256,
+          'pad':'same'}    
+    
 def DeepSTARR(params=params):
 
     lr = params['lr']
@@ -120,6 +157,14 @@ def train(selected_model, X_train, Y_train, X_valid, Y_valid, params):
 
     return selected_model, my_history
 
+
+print("Training the model ...")
+main_model, main_params = DeepSTARR()
+main_model, my_history = train(main_model, X_train, Y_train, X_valid, Y_valid, main_params)
+
+
+
+
 from scipy import stats
 from sklearn.metrics import mean_squared_error
 
@@ -134,48 +179,6 @@ def summary_statistics(X, Y, set, task):
     print(set + ' PCC ' + task + ' = ' + str("{0:0.2f}".format(stats.pearsonr(Y, pred[i].squeeze())[0])))
     print(set + ' SCC ' + task + ' = ' + str("{0:0.2f}".format(stats.spearmanr(Y, pred[i].squeeze())[0])))
 
-print("Downloading fasta files ...")
-# FASTA files with DNA sequences of genomic regions from train/val/test sets
-#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Train.fa'
-#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Val.fa'
-#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Test.fa'
-
-# Files with developmental and housekeeping activity of genomic regions from train/val/test sets
-#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Train.txt'
-#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Val.txt'
-#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Test.txt'
-
-print("Reading in the inputs ... ")
-# Data for train/val/test sets
-X_train_sequence, X_train_seq_matrix, X_train, Y_train = prepare_input("Train")
-X_valid_sequence, X_valid_seq_matrix, X_valid, Y_valid = prepare_input("Valid")
-X_test_sequence, X_test_seq_matrix, X_test, Y_test = prepare_input("Test")
-
-print("Setting training parameters ...")
-
-params = {'batch_size': 128,
-          'epochs': 100,
-          'early_stop': 10,
-          'kernel_size1': 7,
-          'kernel_size2': 3,
-          'kernel_size3': 5,
-          'kernel_size4': 3,
-          'lr': 0.002,
-          'num_filters': 256,
-          'num_filters2': 60,
-          'num_filters3': 60,
-          'num_filters4': 120,
-          'n_conv_layer': 4,
-          'n_add_layer': 2,
-          'dropout_prob': 0.4,
-          'dense_neurons1': 256,
-          'dense_neurons2': 256,
-          'pad':'same'}
-
-
-print("Training the model ...")
-main_model, main_params = DeepSTARR()
-main_model, my_history = train(main_model, X_train, Y_train, X_valid, Y_valid, main_params)
 
 
 print("Evaluating the model ...")
