@@ -87,7 +87,7 @@ main_model.save_weights('Model_' + model_name + '.h5')
 # function to load sequences and enhancer activity
 def prepare_input(set):
     # Convert sequences to one-hot encoding matrix
-    file_seq = str(set+"_sequences.fa")
+    file_seq = str("Data/"+set+"_sequences.fa")
     input_fasta_data_A = IOHelper.get_fastas_from_file(file_seq, uppercase=True)
 
     # get length of first sequence
