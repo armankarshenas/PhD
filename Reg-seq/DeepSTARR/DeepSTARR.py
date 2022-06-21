@@ -1,5 +1,5 @@
 
-print("Importing packages .../n")
+print("Importing packages ...")
 import tensorflow as tf
 import keras
 import keras.layers as kl
@@ -21,69 +21,7 @@ from helper import IOHelper, SequenceHelper # from https://github.com/const-ae/N
 import random
 random.seed(1234)
 
-print("Downloading fasta files .../n ")
-# FASTA files with DNA sequences of genomic regions from train/val/test sets
-#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Train.fa'
-#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Val.fa'
-#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Test.fa'
-
-# Files with developmental and housekeeping activity of genomic regions from train/val/test sets
-#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Train.txt'
-#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Val.txt'
-#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Test.txt'
-
-print("Reading in the inputs ")
-# Data for train/val/test sets
-X_train_sequence, X_train_seq_matrix, X_train, Y_train = prepare_input("Train")
-X_valid_sequence, X_valid_seq_matrix, X_valid, Y_valid = prepare_input("Valid")
-X_test_sequence, X_test_seq_matrix, X_test, Y_test = prepare_input("Test")
-
-print("Setting training parameters")
-
-params = {'batch_size': 128,
-          'epochs': 100,
-          'early_stop': 10,
-          'kernel_size1': 7,
-          'kernel_size2': 3,
-          'kernel_size3': 5,
-          'kernel_size4': 3,
-          'lr': 0.002,
-          'num_filters': 256,
-          'num_filters2': 60,
-          'num_filters3': 60,
-          'num_filters4': 120,
-          'n_conv_layer': 4,
-          'n_add_layer': 2,
-          'dropout_prob': 0.4,
-          'dense_neurons1': 256,
-          'dense_neurons2': 256,
-          'pad':'same'}
-
-
-print("Training the model .../n")
-main_model, main_params = DeepSTARR()
-main_model, my_history = train(main_model, X_train, Y_train, X_valid, Y_valid, main_params)
-
-
-print("Evaluating the model ... /n")
-# run for each set and enhancer type
-summary_statistics(X_train, Y_train[0], "train", "ct_DNA")
-summary_statistics(X_train, Y_train[1], "train", "ct_RNA")
-summary_statistics(X_valid, Y_valid[0], "validation", "ct_DNA")
-summary_statistics(X_valid, Y_valid[1], "validation", "ct_RNA")
-summary_statistics(X_test, Y_test[0], "test", "ct_DNA")
-summary_statistics(X_test, Y_test[1], "test", "ct_RNA")
-
-print("Saving the trained model .../n")
-model_name="Ecoli_regseq"
-
-model_json = main_model.to_json()
-with open('Model_' + model_name + '.json', "w") as json_file:
-    json_file.write(model_json)
-main_model.save_weights('Model_' + model_name + '.h5')
-
-
-
+print("Defining functions ...")
 # function to load sequences and enhancer activity
 def prepare_input(set):
     # Convert sequences to one-hot encoding matrix
@@ -195,3 +133,68 @@ def summary_statistics(X, Y, set, task):
     print(set + ' MSE ' + task + ' = ' + str("{0:0.2f}".format(mean_squared_error(Y, pred[i].squeeze()))))
     print(set + ' PCC ' + task + ' = ' + str("{0:0.2f}".format(stats.pearsonr(Y, pred[i].squeeze())[0])))
     print(set + ' SCC ' + task + ' = ' + str("{0:0.2f}".format(stats.spearmanr(Y, pred[i].squeeze())[0])))
+
+print("Downloading fasta files ...")
+# FASTA files with DNA sequences of genomic regions from train/val/test sets
+#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Train.fa'
+#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Val.fa'
+#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Test.fa'
+
+# Files with developmental and housekeeping activity of genomic regions from train/val/test sets
+#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Train.txt'
+#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Val.txt'
+#!wget 'https://data.starklab.org/almeida/DeepSTARR/Data/Sequences_activity_Test.txt'
+
+print("Reading in the inputs ... ")
+# Data for train/val/test sets
+X_train_sequence, X_train_seq_matrix, X_train, Y_train = prepare_input("Train")
+X_valid_sequence, X_valid_seq_matrix, X_valid, Y_valid = prepare_input("Valid")
+X_test_sequence, X_test_seq_matrix, X_test, Y_test = prepare_input("Test")
+
+print("Setting training parameters ...")
+
+params = {'batch_size': 128,
+          'epochs': 100,
+          'early_stop': 10,
+          'kernel_size1': 7,
+          'kernel_size2': 3,
+          'kernel_size3': 5,
+          'kernel_size4': 3,
+          'lr': 0.002,
+          'num_filters': 256,
+          'num_filters2': 60,
+          'num_filters3': 60,
+          'num_filters4': 120,
+          'n_conv_layer': 4,
+          'n_add_layer': 2,
+          'dropout_prob': 0.4,
+          'dense_neurons1': 256,
+          'dense_neurons2': 256,
+          'pad':'same'}
+
+
+print("Training the model ...")
+main_model, main_params = DeepSTARR()
+main_model, my_history = train(main_model, X_train, Y_train, X_valid, Y_valid, main_params)
+
+
+print("Evaluating the model ...")
+# run for each set and enhancer type
+summary_statistics(X_train, Y_train[0], "train", "ct_DNA")
+summary_statistics(X_train, Y_train[1], "train", "ct_RNA")
+summary_statistics(X_valid, Y_valid[0], "validation", "ct_DNA")
+summary_statistics(X_valid, Y_valid[1], "validation", "ct_RNA")
+summary_statistics(X_test, Y_test[0], "test", "ct_DNA")
+summary_statistics(X_test, Y_test[1], "test", "ct_RNA")
+
+print("Saving the trained model ...")
+model_name="Ecoli_regseq"
+
+model_json = main_model.to_json()
+with open('Model_' + model_name + '.json', "w") as json_file:
+    json_file.write(model_json)
+main_model.save_weights('Model_' + model_name + '.h5')
+
+
+
+
