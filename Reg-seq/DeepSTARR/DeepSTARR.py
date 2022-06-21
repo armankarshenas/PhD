@@ -39,7 +39,7 @@ def prepare_input(set):
     X = np.nan_to_num(seq_matrix_A) # Replace NaN with zero and infinity with large finite numbers
     X_reshaped = X.reshape((X.shape[0], X.shape[1], X.shape[2]))
 
-    Activity = pd.read_table(set +"_activity.txt")
+    Activity = pd.read_table("Data/"+set +"_activity.txt")
     ct_RNA = Activity.ct_RNA
     ct_DNA = Activity.ct_DNA
     Y = [ct_RNA, ct_DNA]
@@ -70,7 +70,7 @@ print("Reading in the inputs ... ")
 X_train_sequence, X_train_seq_matrix, X_train, Y_train = prepare_input("Train")
 X_valid_sequence, X_valid_seq_matrix, X_valid, Y_valid = prepare_input("Valid")
 X_test_sequence, X_test_seq_matrix, X_test, Y_test = prepare_input("Test")
-    
+
 print("Setting training parameters ...")
 
 params = {'batch_size': 128,
@@ -90,8 +90,8 @@ params = {'batch_size': 128,
           'dropout_prob': 0.4,
           'dense_neurons1': 256,
           'dense_neurons2': 256,
-          'pad':'same'}    
-    
+          'pad':'same'}
+
 def DeepSTARR(params=params):
 
     lr = params['lr']
@@ -197,7 +197,3 @@ model_json = main_model.to_json()
 with open('Model_' + model_name + '.json', "w") as json_file:
     json_file.write(model_json)
 main_model.save_weights('Model_' + model_name + '.h5')
-
-
-
-
