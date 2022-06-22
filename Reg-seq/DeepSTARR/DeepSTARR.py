@@ -1,5 +1,6 @@
 
 print("Importing packages ...")
+import os
 import tensorflow as tf
 import keras
 import keras.layers as kl
@@ -8,21 +9,22 @@ from keras.layers.core import Dropout, Reshape, Dense, Activation, Flatten
 from keras.layers import BatchNormalization, InputLayer, Input
 from keras import models
 from keras.models import Sequential, Model
-from keras.optimizers import Adam
+from tensorflow.keras.optimizers import Adam
 from keras.callbacks import EarlyStopping, History, ModelCheckpoint
 
 import pandas as pd
 import numpy as np
 
 import sys
-sys.path.append('Neural_Network_DNA_Demo/')
-from helper import IOHelper, SequenceHelper # from https://github.com/const-ae/Neural_Network_DNA_Demo
+sys.path.insert(1,'/Neural_Network_DNA_Demo/helper')
+import IOHelper, SequenceHelper # from https://github.com/const-ae/Neural_Network_DNA_Demo
 
 import random
 random.seed(1234)
 
 print("Defining functions ...")
 # function to load sequences and enhancer activity
+
 def prepare_input(set):
     # Convert sequences to one-hot encoding matrix
     file_seq = str("Data/"+set+"_sequences.fa")
@@ -32,14 +34,13 @@ def prepare_input(set):
     sequence_length = len(input_fasta_data_A.sequence.iloc[0])
 
     # Convert sequence to one hot encoding matrix
-    seq_matrix_A = SequenceHelper.do_one_hot_encoding(input_fasta_data_A.sequence, sequence_length,
-                                                      SequenceHelper.parse_alpha_to_seq)
+    seq_matrix_A = SequenceHelper.do_one_hot_encoding(input_fasta_data_A.sequence, sequence_length,SequenceHelper.parse_alpha_to_seq)
     print(seq_matrix_A.shape)
 
     X = np.nan_to_num(seq_matrix_A) # Replace NaN with zero and infinity with large finite numbers
     X_reshaped = X.reshape((X.shape[0], X.shape[1], X.shape[2]))
 
-    Activity = pd.read_table("Data/"+set +"_activity.txt")
+    Activity = pd.read_table("Data/"+set +"_activity.txt",sep=',')
     ct_RNA = Activity.ct_RNA
     ct_DNA = Activity.ct_DNA
     Y = [ct_RNA, ct_DNA]
