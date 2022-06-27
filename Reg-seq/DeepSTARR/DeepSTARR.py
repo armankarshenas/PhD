@@ -16,7 +16,7 @@ import pandas as pd
 import numpy as np
 
 import sys
-from Neural_Network_DNA_Demo.hlper import IOHelper, SequenceHelper # from https://github.com/const-ae/Neural_Network_DNA_Demo
+from Neural_Network_DNA_Demo.helper import IOHelper, SequenceHelper # from https://github.com/const-ae/Neural_Network_DNA_Demo
 
 import random
 random.seed(1234)
