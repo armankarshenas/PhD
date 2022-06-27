@@ -4,8 +4,8 @@
 % with the corresponding expression level
  
 %% Specifications 
-Path_to_data = "~/Arman/BerkeleyPhD/Yr2/Reg-seq/DawData";
-Path_to_save = "~/Arman/BerkeleyPhD/Yr2/Reg-seq/Data";
+Path_to_data = "~/Arman/BerkeleyPhD/Yr2/Reg-seq/RawData";
+Path_to_save = "~/Arman/BerkeleyPhD/Yr2/Reg-seq/Data/ykge";
 % bit assignment will be done based on A:1, C:2, G:3, T:4
 train_f = 0.7;
 test_f = 0.15;
@@ -15,7 +15,7 @@ test_f = 0.15;
 %% Main code body
 cd(Path_to_data);
 seq_file = dir(fullfile(pwd,"*.csv"));
-sequences = readtable(seq_file(1).name);
+sequences = readtable(seq_file(3).name);
 fprintf("Showing a preview of the data ...\n");
 head(sequences)
 
