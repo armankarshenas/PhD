@@ -173,9 +173,9 @@ from sklearn.metrics import mean_squared_error
 # create functions
 def summary_statistics(X, Y, set, task):
     pred = main_model.predict(X, batch_size=main_params['batch_size'])
-    if task =="Dev":
+    if task =="ct_DNA":
         i=0
-    if task =="Hk":
+    if task =="ct_RNA":
         i=1
     print(set + ' MSE ' + task + ' = ' + str("{0:0.2f}".format(mean_squared_error(Y, pred[i].squeeze()))))
     print(set + ' PCC ' + task + ' = ' + str("{0:0.2f}".format(stats.pearsonr(Y, pred[i].squeeze())[0])))

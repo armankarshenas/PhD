@@ -44,7 +44,7 @@ test_idx = floor(size(sequences,1)*test_f);
 val_idx = size(sequences,1) - train_idx-test_idx;
 cd(Path_to_save)
 % Training data
-fastawrite("Train_sequences.fa",string(sequences.Header(1:train_idx)),string(sequences.sequence(1:train_idx)));
+fastawrite("Train_sequences.fa",string(sequences.Header(1:train_idx)),string(sequences.sequence(1:train_idx,:)));
 tb_train = table();
 tb_train(:,1) = table(sequences.Header(1:train_idx));
 tb_train(:,2) = table(sequences.ct_DNA(1:train_idx));
@@ -54,7 +54,7 @@ tb_train.Properties.VariableNames{'Var2'} = 'ct_DNA';
 tb_train.Properties.VariableNames{'Var3'} = 'ct_RNA';
 writetable(tb_train,"Train_activity.txt");
 % Testing data 
-fastawrite("Test_sequences.fa",string(sequences.Header(train_idx+1:train_idx+test_idx)),string(sequences.sequence(train_idx+1:train_idx+test_idx)));
+fastawrite("Test_sequences.fa",string(sequences.Header(train_idx+1:train_idx+test_idx)),string(sequences.sequence(train_idx+1:train_idx+test_idx,:)));
 tb_test = table();
 tb_test(:,1) = table(sequences.Header(train_idx+1:train_idx+test_idx));
 tb_test(:,2) = table(sequences.ct_DNA(train_idx+1:train_idx+test_idx));
@@ -64,7 +64,7 @@ tb_test.Properties.VariableNames{'Var2'} = 'ct_DNA';
 tb_test.Properties.VariableNames{'Var3'} = 'ct_RNA';
 writetable(tb_test,"Test_activity.txt");
 % Validation data
-fastawrite("Valid_sequences.fa",string(sequences.Header(train_idx+test_idx+1:end)),string(sequences.sequence(train_idx+test_idx+1:end)));
+fastawrite("Valid_sequences.fa",string(sequences.Header(train_idx+test_idx+1:end)),string(sequences.sequence(train_idx+test_idx+1:end,:)));
 tb_val = table();
 tb_val(:,1) = table(sequences.Header(train_idx+test_idx+1:end));
 tb_val(:,2) = table(sequences.ct_DNA(train_idx+test_idx+1:end));
@@ -72,7 +72,7 @@ tb_val(:,3) = table(sequences.ct_RNA(train_idx+test_idx+1:end));
 tb_val.Properties.VariableNames{'Var1'} = 'Header';
 tb_val.Properties.VariableNames{'Var2'} = 'ct_DNA';
 tb_val.Properties.VariableNames{'Var3'} = 'ct_RNA';
-writetable(tb_test,"Valid_activity.txt");
+writetable(tb_val,"Valid_activity.txt");
 
 
 %% Image generation 
