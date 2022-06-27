@@ -69,13 +69,10 @@ print("Reading in the inputs ... ")
 # Data for train/val/test sets
 X_train_sequence, X_train_seq_matrix, X_train, Y_train = prepare_input("Train")
 print("Training dataset")
-print(X_train.shape(),Y_train.shape())
 X_valid_sequence, X_valid_seq_matrix, X_valid, Y_valid = prepare_input("Valid")
 print("Validation dataset")
-print(X_valid.shape(),Y_valid.shape())
 X_test_sequence, X_test_seq_matrix, X_test, Y_test = prepare_input("Test")
 print("Testing dataset")
-print(X_test.shape(),Y_test.shape())
 print("Setting training parameters ...")
 
 params = {'batch_size': 128,
