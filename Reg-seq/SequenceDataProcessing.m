@@ -5,7 +5,7 @@
  
 %% Specifications 
 Path_to_data = "~/Arman/BerkeleyPhD/Yr2/Reg-seq/RawData";
-Path_to_save = "~/Arman/BerkeleyPhD/Yr2/Reg-seq/Data/ykge";
+Path_to_save = "~/Arman/BerkeleyPhD/Yr2/Reg-seq/Data/LB_dataset";
 % bit assignment will be done based on A:1, C:2, G:3, T:4
 train_f = 0.7;
 test_f = 0.15;
@@ -36,7 +36,8 @@ writetable(binary_seq,"Binary_seq.csv");
 %% Write fasta files 
 header = string(sequences.gene(:)) + "_"+cell2mat(sequences.barcode(1:height(sequences)));
 sequences{:,width(sequences)+1} = header;
-sequences.Properties.VariableNames{'Var7'} = 'Header';
+sequences.Properties.VariableNames{'Var8'} = 'Header';
+sequences(any(ismissing(sequences),2),:) = [];
 index = randperm(size(sequences,1));
 sequences = sequences(index,:);
 train_idx = floor(size(sequences,1)*train_f);
