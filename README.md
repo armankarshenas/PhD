@@ -4,3 +4,4 @@ This repository contains directories for different projects that I have worked o
 
 1. Reg-seq - trying deep learning models on sequence space-expression data to see if we can predict information footprint 
 2. Optogenetics - trying to develop new methodologies to tag and observe gene expression using optogenetics 
+3. Fly-libraries - trying to integrate repressor and activators needed for Eve2 expression (Hb, Bcd, Giant, Kr respectively). 
