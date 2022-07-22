@@ -1,5 +1,16 @@
-function [] = WriteImageToTIFF(seq_read,Path_to_save,name,j)
+function [] = WriteImageToTIFF(seq_read,Path_to_save,name,j,counter)
 cd(Path_to_save);
+if counter<=20000
+    if exist(string(floor(counter/20000)))
+        cd(string(floor(counter/20000)))
+    else
+        mkdir(string(floor(counter/20000)))
+    end
+else
+    counter = 0;
+    mkdir(string(floor(counter/20000)))
+    cd(string(floor(counter/20000)))
+end
 seq_read = single(seq_read);
 name = split(name,".");
 fileName = name{1} + "_" + string(j) + ".tif";
