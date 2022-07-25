@@ -6,10 +6,13 @@
 %% Specifications 
 Path_to_data = "~/Arman/BerkeleyPhD/Yr2/Reg-seq/RawData";
 Path_to_save = "~/Arman/BerkeleyPhD/Yr2/Reg-seq/Data/LB_dataset";
-% bit assignment will be done based on A:1, C:2, G:3, T:4
+Path_to_save_imgs = "/Users/karshenas/Arman/BerkeleyPhD/Yr2/Reg-seq/Data/LB_dataset/imgs";
+
+% threshold of activity for labelling (default 20%)
+act_thresh = 0.2;
+% training and test fraction of the data 
 train_f = 0.7;
 test_f = 0.15;
-% training and test fraction of the data 
 
 
 %% Main code body
@@ -18,112 +21,38 @@ seq_file = dir(fullfile(pwd,"*.csv"));
 sequences = readtable(seq_file(3).name);
 fprintf("Showing a preview of the data ...\n");
 head(sequences)
-
-binary_seq = table();
-binary_seq(:,1:4) = sequences(:,1:4);
-binary_seq.Properties.VariableNames{'Var1'} = 'ct_DNA';
-binary_seq.Properties.VariableNames{'Var2'} = 'ct_RNA';
-binary_seq.Properties.VariableNames{'Var3'} = 'gene';
-binary_seq.Properties.VariableNames{'Var4'} = 'n_mut';
-SeqMatrix = cell2mat(sequences{:,6});
-SeqMatrixBinary = nt2int((SeqMatrix));
-binary_seq(:,5) = table(SeqMatrixBinary);
-binary_seq.Properties.VariableNames{'Var5'} = 'sequence';
-fprintf("Showing a preview of the binary sequence ...\n");
-head(binary_seq)
-cd(Path_to_data)
-writetable(binary_seq,"Binary_seq.csv");
-%% Write fasta files 
+sequences.Properties.VariableNames{5} = 'sequence';
+sequences.Properties.VariableNames{4} = 'ct_DNA';
+sequences.Properties.VariableNames{2} = 'ct_RNA';
 header = string(sequences.gene(:)) + "_"+cell2mat(sequences.barcode(1:height(sequences)));
 sequences{:,width(sequences)+1} = header;
 sequences.Properties.VariableNames{'Var8'} = 'Header';
 sequences(any(ismissing(sequences),2),:) = [];
-index = randperm(size(sequences,1));
-sequences = sequences(index,:);
-train_idx = floor(size(sequences,1)*train_f);
-test_idx = floor(size(sequences,1)*test_f);
-val_idx = size(sequences,1) - train_idx-test_idx;
+
+% Label the dataset
+sequences = RNASeqLabel(sequences,act_thresh);
+
+% Partitioning the dataset
+[tb_test,tb_train,tb_val] = PartitionDataSet(train_f,test_f,sequences);
+
 cd(Path_to_save)
 % Training data
-fastawrite("Train_sequences.fa",string(sequences.Header(1:train_idx)),string(sequences.sequence(1:train_idx,:)));
-tb_train = table();
-tb_train(:,1) = table(sequences.Header(1:train_idx));
-tb_train(:,2) = table(sequences.ct_DNA(1:train_idx));
-tb_train(:,3) = table(sequences.ct_RNA(1:train_idx));
-tb_train.Properties.VariableNames{'Var1'} = 'Header';
-tb_train.Properties.VariableNames{'Var2'} = 'ct_DNA';
-tb_train.Properties.VariableNames{'Var3'} = 'ct_RNA';
+fastawrite("Train_sequences.fa",string(tb_train.Header(:)),string(tb_train.sequence(:)));
 writetable(tb_train,"Train_activity.txt");
+Train_label = [table2array(tb_train(:,width(tb_train)-1)) table2array(tb_train(:,width(tb_train)))];
+save("Train_label.mat",'Train_label');
 % Testing data 
-fastawrite("Test_sequences.fa",string(sequences.Header(train_idx+1:train_idx+test_idx)),string(sequences.sequence(train_idx+1:train_idx+test_idx,:)));
-tb_test = table();
-tb_test(:,1) = table(sequences.Header(train_idx+1:train_idx+test_idx));
-tb_test(:,2) = table(sequences.ct_DNA(train_idx+1:train_idx+test_idx));
-tb_test(:,3) = table(sequences.ct_RNA(train_idx+1:train_idx+test_idx));
-tb_test.Properties.VariableNames{'Var1'} = 'Header';
-tb_test.Properties.VariableNames{'Var2'} = 'ct_DNA';
-tb_test.Properties.VariableNames{'Var3'} = 'ct_RNA';
+fastawrite("Test_sequences.fa",string(tb_test.Header(:)),string(tb_test.sequence(:)));
 writetable(tb_test,"Test_activity.txt");
+Test_label = [table2array(tb_test(:,width(tb_test)-1)) table2array(tb_test(:,width(tb_train)))];
+save("Test_label.mat",'Test_label');
 % Validation data
-fastawrite("Valid_sequences.fa",string(sequences.Header(train_idx+test_idx+1:end)),string(sequences.sequence(train_idx+test_idx+1:end,:)));
-tb_val = table();
-tb_val(:,1) = table(sequences.Header(train_idx+test_idx+1:end));
-tb_val(:,2) = table(sequences.ct_DNA(train_idx+test_idx+1:end));
-tb_val(:,3) = table(sequences.ct_RNA(train_idx+test_idx+1:end));
-tb_val.Properties.VariableNames{'Var1'} = 'Header';
-tb_val.Properties.VariableNames{'Var2'} = 'ct_DNA';
-tb_val.Properties.VariableNames{'Var3'} = 'ct_RNA';
+fastawrite("Valid_sequences.fa",string(tb_val.Header(:)),string(tb_val.sequence(:)));
 writetable(tb_val,"Valid_activity.txt");
+Valid_label = [table2array(tb_val(:,width(tb_val)-1)) table2array(tb_val(:,width(tb_val)))];
+save("Valid_label.mat",'Valid_label');
 
 
-%% Image generation 
-fprintf("Writing images ... \n")
-cd(Path_to_data)
-mkdir("BinaryImages")
-cd("BinaryImages")
+% Generate images for the OneHotEncoder 
+OneHotSequence(Path_to_save,Path_to_save_imgs);
 
-tagstruct.ImageLength = 16;
-tagstruct.ImageWidth = 10;
-tagstruct.Compression = Tiff.Compression.None;
-tagstruct.SampleFormat = Tiff.SampleFormat.IEEEFP;
-tagstruct.Photometric = Tiff.Photometric.MinIsBlack;
-tagstruct.BitsPerSample = 32;
-tagstruct.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;
-
-for i=1:size(SeqMatrixBinary,1)
-    tic;
-    temp = reshape(SeqMatrixBinary(i,:),10,16)';
-    temp = single(temp);
-    temp = histeq(temp);
-    name = string(i) + ".tif";
-    tiffObject = Tiff(name, 'w');
-    tiffObject.setTag(tagstruct);
-    tiffObject.write(temp);
-    tiffObject.close;
-    toc
-end
-
-
-
-
-
-%{ 
-This takes 50 days to run! 
-for i=1:height(sequences)
-    tic;
-    temp = sequences.sequence{i};
-    temp_binary = zeros(1,length(temp));
-    for j=1:length(temp)
-        if temp(j) == "T"
-            temp_binary(j) = 1;
-        elseif temp(j) == "C" 
-            temp_binary(j) = 2;
-        elseif temp(j) == "G" 
-            temp_binary(j) = 3;
-        end
-    end
-    binary_seq(i,5) = table(temp_binary);
-    toc
-end
-%}
- 

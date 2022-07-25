@@ -1,16 +1,13 @@
-%% This script generates matrices for each sequence as a one-hot encoder
-
-%% Specifications 
-addpath(genpath("/Users/karshenas/Arman/BerkeleyPhD/PhD/Reg-seq"))
-Path_to_data = "/Users/karshenas/Arman/BerkeleyPhD/Yr2/Reg-seq/Data/LB_dataset";
-Path_to_save = "/Users/karshenas/Arman/BerkeleyPhD/Yr2/Reg-seq/Data/LB_dataset/imgs";
-
+function [] = OneHotSequence(Path_to_data,Path_to_save)
+% This function generates matrices for each sequence as a one-hot encoder
 %% Main code 
 cd(Path_to_data)
 FST_files = dir(fullfile(pwd,"*.fa"));
+LBL_files = dir(fullfile(pwd,"*.mat"));
 for i=1:length(FST_files)
     OneHot = struct();
     fst = fastaread(FST_files(i).folder + "/"+ FST_files(i).name);
+    LBL = load(LBL_files(i).folder + "/" + LBL_files(i).name);
     counter = 0;
     path_name = split(FST_files(i).name,"_");
     path_name = path_name{1};
@@ -30,4 +27,4 @@ for i=1:length(FST_files)
     name = name + ".mat";
     save(name,'OneHot');
 end
-
+end
