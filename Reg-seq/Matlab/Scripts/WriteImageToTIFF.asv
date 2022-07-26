@@ -2,21 +2,21 @@ function [] = WriteImageToTIFF(seq_read,Path_to_save,gene,RNA_label,name)
 cd(Path_to_save);
 seq_read = single(seq_read);
 
-if exist(gene) == 7
+if exist(gene)
     cd(gene)
 else
     mkdir(gene)
     cd(gene)
 end
 
-if exist(string(RNA_label)) == 7
+if exist(string(RNA_label))
     cd(string(RNA_label))
 else
     mkdir(string(RNA_label));
     cd(string(RNA_label));
 end
 
-fileName = name + ".tif";
+fileName = name{1} + "_" + string(j) + ".tif";
 tiffObject = Tiff(fileName, 'w');
 % Set tags.
 tagstruct.ImageLength = size(seq_read,1); 

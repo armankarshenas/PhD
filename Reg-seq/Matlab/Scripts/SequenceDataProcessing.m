@@ -4,6 +4,7 @@
 % with the corresponding expression level
  
 %% Specifications 
+addpath(genpath("/Users/karshenas/Arman/BerkeleyPhD/PhD/Reg-seq/Matlab"))
 Path_to_data = "~/Arman/BerkeleyPhD/Yr2/Reg-seq/RawData";
 Path_to_save = "~/Arman/BerkeleyPhD/Yr2/Reg-seq/Data/LB_dataset";
 Path_to_save_imgs = "/Users/karshenas/Arman/BerkeleyPhD/Yr2/Reg-seq/Data/LB_dataset/imgs";
