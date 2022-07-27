@@ -21,7 +21,7 @@ for i=1:length(FST_files)
         OneHot(j).index = fst(j).Header;
         OneHot(j).RNA_label = tb.label_RNA(j);
         OneHot(j).DNA_label = tb.label_DNA(j);
-        waitbar(j/height(tb),"Processing gene" + string(tb.gene{j}))
+        waitbar(j/height(tb),"Processing " + FST_files(i).name + " ...")
     end
     cd(Path_to_data)
     name = split(FST_files(i).name,".fa");
