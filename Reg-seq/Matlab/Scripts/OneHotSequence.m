@@ -5,6 +5,7 @@ cd(Path_to_data)
 TXT_files = dir(fullfile(pwd,"*.txt"));
 FST_files = dir(fullfile(pwd,"*.fa"));
 for i=1:length(FST_files)
+    fprintf("Processing %s ... \n",FST_files(i).name);
     OneHot = struct();
     fst = fastaread(FST_files(i).folder + "/"+ FST_files(i).name);
     tb = readtable(TXT_files(i).folder+"/"+TXT_files(i).name);
@@ -21,7 +22,7 @@ for i=1:length(FST_files)
         OneHot(j).index = fst(j).Header;
         OneHot(j).RNA_label = tb.label_RNA(j);
         OneHot(j).DNA_label = tb.label_DNA(j);
-        waitbar(j/height(tb),"Processing " + FST_files(i).name + " ...")
+        waitbar(j/height(tb))
     end
     cd(Path_to_data)
     name = split(FST_files(i).name,".fa");
