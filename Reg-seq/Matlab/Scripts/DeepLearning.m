@@ -51,11 +51,17 @@ plot(layerGraph(layers));
 
 % Specifying training options 
 opts = trainingOptions("sgdm",...
-    "ExecutionEnvironment","auto",...
+    "ExecutionEnvironment","cpu",...
     "InitialLearnRate",0.01,...
     "Shuffle","every-epoch",...
     "Plots","training-progress",...
-    "ValidationData",imds_valid);
+    "ValidationData",imds_valid,'ValidationFrequency',100);
 
 % Training the network  
+
 [net, traininfo] = trainNetwork(imds_test,layers,opts);
+
+cd(Path_to_save)
+name = "Lb_dataset_v1_allgene.mat";
+save(name,'net');
+
