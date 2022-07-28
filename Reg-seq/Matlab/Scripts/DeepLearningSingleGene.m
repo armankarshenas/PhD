@@ -7,15 +7,14 @@
 
 addpath(genpath("/media/zebrafish/Data2/Arman/PhD/Reg-seq/Matlab/Scripts"))
 Path_to_data = "/media/zebrafish/Data2/Arman/Data/LB_dataset/imgs";
-Path_to_save = "/media/zebrafish/Data2/Arman/Data/LB_dataset/Model";
+Path_to_save = "/media/zebrafish/Data2/Arman/Data/LB_dataset/Model/";
 
 
 %% Main code
 cd(Path_to_data)
-% Load the dataset
-imds_train = imageDatastore(Path_to_data + "/Train",'IncludeSubfolders',true,'LabelSource','foldernames');
-imds_test = imageDatastore(Path_to_data + "/Test",'IncludeSubfolders',true,'LabelSource','foldernames');
-imds_valid = imageDatastore(Path_to_data+"/Valid",'IncludeSubfolders',true,'LabelSource','foldernames');
+cd("Train")
+Genes = dir(pwd);
+cd ..
 
 % Here I will have to implement some code that gets the size and number of
 % classes from the imds and use those in network arch 
@@ -46,8 +45,13 @@ layers = [
     dropoutLayer(0.4,"Name","dropout_2")
     softmaxLayer("Name","softmax")
     classificationLayer("Name","classoutput")];
-plot(layerGraph(layers));
 
+for i=3:length(Genes)
+
+% Load the dataset
+imds_train = imageDatastore(Path_to_data + "/Train"+"/"+Genes(i).name,'IncludeSubfolders',true,'LabelSource','foldernames');
+imds_test = imageDatastore(Path_to_data + "/Test"+"/"+Genes(i).name,'IncludeSubfolders',true,'LabelSource','foldernames');
+imds_valid = imageDatastore(Path_to_data+"/Valid"+"/"+Genes(i).name,'IncludeSubfolders',true,'LabelSource','foldernames');
 
 % Specifying training options 
 opts = trainingOptions("sgdm",...
@@ -59,13 +63,20 @@ opts = trainingOptions("sgdm",...
     "ValidationData",imds_valid,'ValidationFrequency',100);
 
 % Training the network  
-diary All_genes_v1_training 
+cd(Path_to_save)
+if exist(Genes(i).name) == 7
+    cd(Genes(i).name)
+else
+    mkdir(Genes(i).name)
+    cd(Genes(i).name)
+end
+
+diary on
 [net, traininfo] = trainNetwork(imds_test,layers,opts);
 diary off
 
 % Saving the model
-cd(Path_to_save)
-name = "Lb_dataset_v1_allgene.mat";
+name = Genes(i).name +"_trained_network.mat";
 save(name,'net');
 
 % Evaluate the model 
@@ -74,6 +85,4 @@ Y = classify(net,imds_test);
 confusionchart(imds_test.Labels,Y);
 saveas(gca,'ConfusionMatrix.png');
 
-
-
-
+end

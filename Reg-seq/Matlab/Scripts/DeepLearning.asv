@@ -71,8 +71,7 @@ save(name,'net');
 % Evaluate the model 
 
 Y = classify(net,imds_test);
-confusionchart(imds_test.Labels,Y);
-saveas(gca,'ConfusionMatrix.png');
+confustionchart 
 
 
 
