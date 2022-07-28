@@ -7,7 +7,7 @@
 
 addpath(genpath("/media/zebrafish/Data2/Arman/PhD/Reg-seq/Matlab/Scripts"))
 Path_to_data = "/media/zebrafish/Data2/Arman/Data/LB_dataset/imgs";
-Path_to_save = "/media/zebrafish/Data2/Arman/Data/LB_dataset/Model/";
+Path_to_save = "/media/zebrafish/Data2/Arman/Data/LB_dataset/Model/Single_genes";
 
 
 %% Main code
@@ -71,7 +71,7 @@ else
     cd(Genes(i).name)
 end
 
-diary on
+diary training_log.txt
 [net, traininfo] = trainNetwork(imds_test,layers,opts);
 diary off
 

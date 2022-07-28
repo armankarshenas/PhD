@@ -7,7 +7,7 @@
 
 addpath(genpath("/media/zebrafish/Data2/Arman/PhD/Reg-seq/Matlab/Scripts"))
 Path_to_data = "/media/zebrafish/Data2/Arman/Data/LB_dataset/imgs";
-Path_to_save = "/media/zebrafish/Data2/Arman/Data/LB_dataset/Model";
+Path_to_save = "/media/zebrafish/Data2/Arman/Data/LB_dataset/Model/";
 
 
 %% Main code
@@ -59,7 +59,7 @@ opts = trainingOptions("sgdm",...
     "ValidationData",imds_valid,'ValidationFrequency',100);
 
 % Training the network  
-diary All_genes_v1_training 
+diary training_log.txt 
 [net, traininfo] = trainNetwork(imds_test,layers,opts);
 diary off
 
