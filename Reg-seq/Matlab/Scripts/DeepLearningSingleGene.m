@@ -45,7 +45,7 @@ layers = [
     dropoutLayer(0.4,"Name","dropout_2")
     softmaxLayer("Name","softmax")
     classificationLayer("Name","classoutput")];
-
+ACC = struct();
 for i=3:length(Genes)
 
 % Load the dataset
@@ -58,9 +58,9 @@ opts = trainingOptions("sgdm",...
     "ExecutionEnvironment","auto",...
     "InitialLearnRate",0.01,...
     "Shuffle","every-epoch",...
-    'LearnRateDropFactor',0.1,'LearnRateDropPeriod',5,'LearnRateSchedule','piecewise','ValidationPatience',5,'OutputNetwork','best-validation-loss',...
-    "Plots","training-progress",...
-    "ValidationData",imds_valid,'ValidationFrequency',100);
+    'LearnRateDropFactor',0.2,'LearnRateDropPeriod',5,'LearnRateSchedule','piecewise','ValidationPatience',30,'OutputNetwork','best-validation-loss',...
+    "Plots","none",...
+    "ValidationData",imds_valid,'ValidationFrequency',20);
 
 % Training the network  
 cd(Path_to_save)
@@ -83,6 +83,10 @@ save(name,'net');
 
 Y = classify(net,imds_test);
 confusionchart(imds_test.Labels,Y);
+ACC(i-2).gene = Genes(i).name;
+ACC(i-2).acc = nnz(Y==imds_test.Labels)/length(Y);
 saveas(gca,'ConfusionMatrix.png');
-
+close all
 end
+cd(Path_to_save)
+save("SingelGeneACC.mat",'ACC');
