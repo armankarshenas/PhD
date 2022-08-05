@@ -1,0 +1,15 @@
+function [] = SingleGeneBarPlots(ACC)
+%% Plotting bar charts for single gene activity accuracy 
+fig1 = figure();
+hold on;
+tb = struct2table(ACC);
+acc = (tb.acc);
+name = string(tb.gene);
+[sorted_acc,indx] = sort(acc);
+sorted_name = [];
+for i=1:length(acc)
+    sorted_name = [sorted_name name(indx(i))];
+end
+sorted_name = categorical(s)
+bar(categorical(sorted_name,'Ordinal',0),sorted_acc,'black')
+end
