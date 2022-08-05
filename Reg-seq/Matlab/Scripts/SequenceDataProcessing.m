@@ -6,11 +6,11 @@
 %% Specifications 
 addpath(genpath("/media/zebrafish/Data2/Arman/PhD/Reg-seq/Matlab/Scripts"))
 Path_to_data = "/media/zebrafish/Data2/Arman/Data/LB_dataset";
-Path_to_save = "/media/zebrafish/Data2/Arman/Data/LB_dataset";
-Path_to_save_imgs = "/media/zebrafish/Data2/Arman/Data/LB_dataset/imgs";
+Path_to_save = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.15";
+Path_to_save_imgs = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.15/imgs";
 
 % threshold of activity for labelling (default 20%)
-act_thresh = 0.2;
+act_thresh = 0.15;
 % training and test fraction of the data 
 train_f = 0.7;
 test_f = 0.15;
@@ -19,7 +19,7 @@ test_f = 0.15;
 %% Main code body
 cd(Path_to_data);
 seq_file = dir(fullfile(pwd,"*.csv"));
-sequences = readtable(seq_file(3).name);
+sequences = readtable(seq_file(1).name);
 fprintf("Showing a preview of the data ...\n");
 head(sequences)
 sequences.Properties.VariableNames{5} = 'sequence';
