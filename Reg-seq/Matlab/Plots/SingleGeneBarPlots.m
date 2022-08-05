@@ -13,4 +13,5 @@ end
 sorted_name = categorical(sorted_name);
 sorted_name = reordercats(sorted_name,indx);
 bar(sorted_name,sorted_acc,'FaceColor','red','FaceAlpha',0.4,'EdgeColor','black')
+saveas(fig1,"ACCBarChart.png");
 end
