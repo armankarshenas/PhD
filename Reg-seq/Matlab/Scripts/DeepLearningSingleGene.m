@@ -85,6 +85,7 @@ Y = classify(net,imds_test);
 confusionchart(imds_test.Labels,Y);
 ACC(i-2).gene = Genes(i).name;
 ACC(i-2).acc = nnz(Y==imds_test.Labels)/length(Y);
+ACC(i-2).datapt = length(Y)*100/15;
 saveas(gca,'ConfusionMatrix.png');
 close all
 end

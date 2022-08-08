@@ -10,7 +10,7 @@ Path_to_save = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.10";
 Path_to_save_imgs = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.10/imgs";
 
 % threshold of activity for labelling (default 20%)
-act_thresh = 0.15;
+act_thresh = 0.10;
 % training and test fraction of the data 
 train_f = 0.7;
 test_f = 0.15;
