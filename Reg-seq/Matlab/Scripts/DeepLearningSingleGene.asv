@@ -77,7 +77,7 @@ diary off
 
 % Saving the model
 name = Genes(i).name +"_trained_network.mat";
-save(name,'net');
+save(name,'net','traininfo');
 
 % Evaluate the model 
 
@@ -85,8 +85,11 @@ Y = classify(net,imds_test);
 confusionchart(imds_test.Labels,Y);
 ACC(i-2).gene = Genes(i).name;
 ACC(i-2).acc = nnz(Y==imds_test.Labels)/length(Y);
+ACC(i-2).datapt = length(Y)*100/15;
 saveas(gca,'ConfusionMatrix.png');
 close all
 end
 cd(Path_to_save)
 save("SingelGeneACC.mat",'ACC');
+SingleGeneBarPlots(ACC,pwd);
+saveas(gca,'')

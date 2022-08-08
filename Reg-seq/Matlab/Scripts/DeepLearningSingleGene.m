@@ -77,7 +77,7 @@ diary off
 
 % Saving the model
 name = Genes(i).name +"_trained_network.mat";
-save(name,'net');
+save(name,'net','traininfo');
 
 % Evaluate the model 
 
@@ -91,3 +91,7 @@ close all
 end
 cd(Path_to_save)
 save("SingelGeneACC.mat",'ACC');
+SingleGeneBarPlots(ACC,pwd);
+saveas(gca,'BarChart.fig');
+close all;
+
