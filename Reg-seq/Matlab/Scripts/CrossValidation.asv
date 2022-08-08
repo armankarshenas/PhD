@@ -1,28 +1,26 @@
 %% Info
 % This script 1: loads the dataset, 2: sets the network architechure, 3:
-% train the network, 4: evaluate the model, and 5: plots any neccessary
-% figures
+% train the network, 4: evaluate the model for cross validation
 
 %% Specifications 
 
 addpath(genpath("/media/zebrafish/Data2/Arman/PhD/Reg-seq/Matlab/Scripts"))
-Path_to_data = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.15/imgs";
-Path_to_save = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.15/Model/Single_genes";
+Path_to_data = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.10/imgs";
+Path_to_save = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.10/Model/CrossVal";
 
+kernel_sz = 3:1:10;
 
 %% Main code
 cd(Path_to_data)
 cd("Train")
 Genes = dir(pwd);
 cd ..
-
-% Here I will have to implement some code that gets the size and number of
-% classes from the imds and use those in network arch 
+for ker=1:length(kernel_sz)
 
 % Set the network architechture
 layers = [
     imageInputLayer([4 160 1],"Name","SequenceInput")
-    convolution2dLayer([7 7],256,"Name","conv_1","Padding","same")
+    convolution2dLayer([kernel_sz(ker) kernel_sz(ker)],256,"Name","conv_1","Padding","same")
     convolution2dLayer([3 3],60,"Name","conv_2","Padding","same")
     batchNormalizationLayer("Name","batchnorm_1")
     reluLayer("Name","relu_1")
@@ -64,6 +62,13 @@ opts = trainingOptions("sgdm",...
 
 % Training the network  
 cd(Path_to_save)
+if exist(string(ker)) == 7
+    cd(string(ker))
+else
+    mkdir(string(ker))
+    cd(string(ker))
+end
+
 if exist(Genes(i).name) == 7
     cd(Genes(i).name)
 else
@@ -83,7 +88,7 @@ save(name,'net','traininfo');
 
 Y = classify(net,imds_test);
 confusionchart(imds_test.Labels,Y);
-ACC(i-2).gene = Genes(i).name;
+ACC(i-2).gene(ker) = Genes(i).name;
 ACC(i-2).acc = nnz(Y==imds_test.Labels)/length(Y);
 ACC(i-2).datapt = length(Y)*100/15;
 saveas(gca,'ConfusionMatrix.png');
@@ -91,5 +96,4 @@ close all
 end
 cd(Path_to_save)
 save("SingelGeneACC.mat",'ACC');
-SingleGeneBarPlots(ACC,pwd);
-saveas(gca,'')
+end
