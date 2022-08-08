@@ -6,8 +6,8 @@
 %% Specifications 
 
 addpath(genpath("/media/zebrafish/Data2/Arman/PhD/Reg-seq/Matlab/Scripts"))
-Path_to_data = "/media/zebrafish/Data2/Arman/Data/LB_dataset/imgs";
-Path_to_save = "/media/zebrafish/Data2/Arman/Data/LB_dataset/Model/Single_genes";
+Path_to_data = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.15/imgs";
+Path_to_save = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.15/Model/Single_genes";
 
 
 %% Main code
