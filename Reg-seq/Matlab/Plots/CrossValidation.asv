@@ -1,0 +1,36 @@
+function [] = CrossValidation(ACC,Path_to_save)
+
+fig = figure();
+subplot(3,1,1);
+kernel_sz = 3:1:10;
+best_acc = zeros(1,length(ACC));
+mean_acc = zeros(1,length(ACC));
+names = [];
+for i=1:length(ACC)
+    plot(kernel_sz,ACC(i).acc,'DisplayName',ACC(i).gene);
+    hold on;
+    best_acc(i) = max(ACC(i).acc);
+    mean_acc(i) = mean(ACC(i).acc);
+    names = [names ACC(i).gene];
+end
+xlabel("Motif Size (bp)",'FontSize',14,'Interpreter','latex');
+ylabel("Classification accuracy",'FontSize',14,'Interpreter','latex');
+legend();
+grid on;
+
+
+subplot(3,1,2)
+
+[sorted_best_acc,indxbst] = sort(best_acc);
+[sorted_mean_acc,indxmean] = sort(mean_acc);
+
+sorted_name_best = categorical(names);
+sorted_name_mean = categorical(names);
+
+sorted_name_best = reordercar 
+
+scatter(names,best_acc)
+
+cd(Path_to_save)
+saveas(gca,"CrossValidation.fig")
+end

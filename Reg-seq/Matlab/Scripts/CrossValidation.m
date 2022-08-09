@@ -87,9 +87,9 @@ save(name,'net','traininfo');
 
 Y = classify(net,imds_test);
 
-ACC(i-2).gene(ker) = Genes(i).name;
+ACC(i-2).gene = Genes(i).name;
 ACC(i-2).acc(ker) = nnz(Y==imds_test.Labels)/length(Y);
-ACC(i-2).datapt(ker) = length(Y)*100/15;
+ACC(i-2).datapt = length(Y)*100/15;
 
 end
 end
