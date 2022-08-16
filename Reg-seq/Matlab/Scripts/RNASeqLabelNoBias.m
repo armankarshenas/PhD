@@ -15,14 +15,16 @@ function tb_output = RNASeqLabelNoBias(tb_input,act_thresh)
         if sum(idx(:) == 1) > 100
             tb_gene = tb(idx,:);
             % First ct_RNA
-            [th_up,th_down] = FindThreshold(tb_gene,'ct_RNA',act_thresh);
+            [th_up,th_down,th_med_down,th_med_up] = FindThresholdAndMedian(tb_gene,'ct_RNA',act_thresh);
             tb((idx & tb.ct_RNA >=th_up),width(tb)-1) = table(1);
             tb((idx & tb.ct_RNA <= th_down),width(tb)-1) = table(-1);
-            
+            tb((idx & tb.ct_RNA > th_med_up & tb.ct_RNA < th_med_down),:) = [];
+    
             % Now ct_DNA
-            [th_up,th_down] = FindThreshold(tb_gene,'ct_DNA',act_thresh);
-            tb((idx & tb.ct_RNA >=th_up),width(tb)) = table(1);
-            tb((idx & tb.ct_RNA <= th_down),width(tb)) = table(-1);
+            [th_up,th_down,th_med_down,th_med_up] = FindThresholdAndMedian(tb_gene,'ct_DNA',act_thresh);
+            tb((idx & tb.ct_DNA >=th_up),width(tb)) = table(1);
+            tb((idx & tb.ct_DNA <= th_down),width(tb)) = table(-1);
+            tb((idx & tb.ct_DNA > th_med_up & tb.ct_DNA < th_med_down),:) = [];
         else 
             fprintf("Too few data points for %s \n",string(genes(gene)));
             % Removing these from the activity files 

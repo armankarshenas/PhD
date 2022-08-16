@@ -20,8 +20,8 @@ function tb_output = RNASeqLabel(tb_input,act_thresh)
             tb((idx & tb.ct_RNA <= th_down),width(tb)-1) = table(-1);
             % Now ct_DNA
             [th_up,th_down] = FindThreshold(tb_gene,'ct_DNA',act_thresh);
-            tb((idx & tb.ct_RNA >=th_up),width(tb)) = table(1);
-            tb((idx & tb.ct_RNA <= th_down),width(tb)) = table(-1);
+            tb((idx & tb.ct_DNA >=th_up),width(tb)) = table(1);
+            tb((idx & tb.ct_DNA <= th_down),width(tb)) = table(-1);
         else 
             fprintf("Too few data points for %s \n",string(genes(gene)));
             % Removing these from the activity files 
