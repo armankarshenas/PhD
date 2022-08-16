@@ -83,6 +83,8 @@ save(name,'net','traininfo');
 
 Y = classify(net,imds_test);
 confusionchart(imds_test.Labels,Y);
+F1 = F1_measure(imds_test.Labels,Y,3);
+save('F1.mat','F1');
 ACC(i-2).gene = Genes(i).name;
 ACC(i-2).acc = nnz(Y==imds_test.Labels)/length(Y);
 ACC(i-2).datapt = length(Y)*100/15;
