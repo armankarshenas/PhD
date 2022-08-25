@@ -4,7 +4,6 @@
 %% Specifications 
 Path_to_data = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.20/imgs";
 Path_to_model = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.20/Model/Single_genes";
-
 %% Main code 
 cd(Path_to_model)
 Genes = dir(pwd);
@@ -36,12 +35,21 @@ act = reshape(act,[sz(1) sz(2) 1 sz(3)]);
 %}
 
 % Gradient visualization 
-gradcamMap = struct();
+cd(Path_to_data)
+cd ..
+load("Test_sequences.fa")
+OneHot = struct2table(OneHot);
+tb = OneHot(contains(string(OneHot.index),Genes(i).name),:);
+
+inputsz = net.Layers(1).InputSize;
+gradcamMap = zeros(inputsz(1),inputsz(2),length(imds));
 for j=1:length(imds)
     I = imread(string(imds.Files(j)));    
-    gradcamMap(j).map = gradCAM(net,I,YPred(j));
-    
+    gradcamMap(:,:,j) = gradCAM(net,I,YPred(j));
 end
+
+
+
 
 end
 cd(Path_to_data)
