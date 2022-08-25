@@ -8,11 +8,11 @@ Path_to_model = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.20/Model/Single_
 %% Main code 
 cd(Path_to_model)
 Genes = dir(pwd);
-for i=3:length(Genes)
+for i=4:length(Genes)
 cd(Path_to_model+"/"+Genes(i).name);
 net = load(Genes(i).name+"_trained_network.mat");
-imds = imagedatastore(Path_to_data+"/"+Genes(i).name+"/Test");
-[YPred,scores] = classify(net,imds_test);
+imds = imageDatastore(Path_to_data+"/Test/"+Genes(i).name,'IncludeSubfolders',true);
+[YPred,scores] = classify(net,imds);
 edges = 0:0.1:1;
 h1 = histcounts(scores(:,1),edges);
 h2 = histcounts(scores(:,2),edges);
