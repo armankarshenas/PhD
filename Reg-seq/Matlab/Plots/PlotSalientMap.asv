@@ -1,6 +1,0 @@
-function [] = PlotSalientMap(Image,cmap)
-    
-    heatmap(Image,'Colormap',cmap);
-    
-
-end
