@@ -2,8 +2,10 @@
 % This script generates saliency maps for models and inputs 
 
 %% Specifications 
+addpath(genpath("/media/zebrafish/Data2/Arman/PhD/Reg-Seq/Matlab"));
 Path_to_data = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.20/imgs";
 Path_to_model = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.20/Model/Single_genes";
+
 %% Main code 
 cd(Path_to_model)
 Genes = dir(pwd);
@@ -86,13 +88,24 @@ SalinetMaps(4).Name = "All Expression Data";
 SalinetMaps(4).Map = mean(gradcamMap,3);
 SalientMaps(4).data = gradcamMap;
 
-
+% Finding the most common sequence from the sequences used
+commonseq = CommonSequence(Seq);
 cd(Path_to_model);
+PlotSalientMap(SalientMaps(1).Map,"hot",commonseq,pwd,SalientMaps(1).name);
+PlotSalinetMap(SalientMaps(2).Map,"hot",commonseq,pwd,SalientMaps(2).name);
+PlotSalientMap(SalientMaps(3).Map,"hot",commonseq,pwd,SalinetMaps(3).name);
+PlotSalientMap(SalientMaps(4).Map,"hot",commonseq,pwd,SalientMaps(4).name);
 figure();
-subplot(4,2,1);
-PlotSalientMap(SalientMaps(1).Map,"hot",)
-
+plot(max(SalientMaps(1).Map),'LineWidth',2,'Color','r','DisplayName',SalientMaps(1).name);
+hold on;
+plot(max(SalientMaps(2).Map),'LineWidth',2,'Color','b','DisplayName',SalientMaps(2).name);
+hold on;
+plot(max(SalientMaps(3).Map),'LineWidth',2,'Color','k','DisplayName',SalientMaps(3).name);
+hold on;
+plot(max(SalientMaps(4).Map),'LineWidth',2,'Color','m','DisplayName',SalientMaps(4).name);
+hold on;
+saveas(gcf,"PredictedBindingSites.fig");
+close
 
 
 end
-cd(Path_to_data)
