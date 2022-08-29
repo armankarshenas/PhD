@@ -19,12 +19,14 @@ sorted_name = categorical(sorted_name);
 sorted_name = reordercats(sorted_name,indx);
 b = bar(sorted_name,sorted_acc,'FaceColor','red','FaceAlpha',0.4,'EdgeColor','black');
 hold on
+grid on
 subplot(2,1,2);
 sorted_label = categorical(sorted_label);
 sorted_label = reordercats(sorted_label,indxdtp);
 scatter(sorted_label,sorted_dtp,'*','r');
 xlabel("Genes",'FontSize',15,'Interpreter','latex');
 ylabel("Number of data points",'FontSize',15,'Interpreter','latex');
+grid on;
 cd(Path_to_save)
-saveas(fig1,"ACCBarChart.png");
+saveas(fig1,"ACCBarChart.fig");
 end
