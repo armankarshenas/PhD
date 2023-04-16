@@ -5,13 +5,13 @@ clc
 close all
 %% Specifications
 addpath(genpath("/media/zebrafish/Data2/Arman/PhD/Reg-seq/Matlab"));
-Path_to_data = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.20/imgs";
-Path_to_model = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.20/Model/Single_genes";
+Path_to_data = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.10/imgs";
+Path_to_model = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.10/Model/Single_genes";
 
 %% Main code
 cd(Path_to_model)
 Genes = dir(pwd);
-for i=4:length(Genes)
+for i=5:length(Genes)
     waitbar(i/length(Genes));
     cd(Path_to_model+"/"+Genes(i).name);
     net = load(Genes(i).name+"_trained_network.mat");

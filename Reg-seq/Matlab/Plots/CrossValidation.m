@@ -2,7 +2,7 @@ function [] = CrossValidation(ACC,Path_to_save)
 tb = struct2table(ACC);
 fig = figure();
 subplot(3,1,1);
-kernel_sz = 3:1:10;
+kernel_sz = 3:1:20;
 best_acc = zeros(1,length(ACC));
 mean_acc = zeros(1,length(ACC));
 names = string(tb.gene);

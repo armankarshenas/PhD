@@ -6,9 +6,9 @@
 
 addpath(genpath("/media/zebrafish/Data2/Arman/PhD/Reg-seq/Matlab/Scripts"))
 Path_to_data = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.10/imgs";
-Path_to_save = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.10/Model/CrossVal";
+Path_to_save = "/media/zebrafish/Data2/Arman/Data/LB_dataset/0.10/Model/CrossVal3";
 
-kernel_sz = 3:1:10;
+kernel_sz = 3:1:20;
 
 %% Main code
 cd(Path_to_data)

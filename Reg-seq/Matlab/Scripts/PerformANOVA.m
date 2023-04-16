@@ -8,6 +8,9 @@ function [measure_dist] = PerformANOVA(tb_gene,OH_gene,Path_to_save,name)
     close all
     % Performing multi comparison
     [result,m,~,gnames] = multcompare(stats);
+    name_3 = name{1}+"_multcomp.png";
+    saveas(gca,name_3);
+    close all
     tbl = array2table(result,"VariableNames",["Group A","Group B","Lower Limit","A-B","Upper Limit","P-value"]);
     tbl.("Group A") = gnames(tbl.("Group A"));
     tbl.("Group B") = gnames(tbl.("Group B"));
