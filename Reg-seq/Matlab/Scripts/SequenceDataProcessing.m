@@ -6,8 +6,8 @@
 %% Specifications 
 addpath(genpath("/media/zebrafish/Data2/Arman/PhD/Reg-seq/Matlab/Scripts"))
 Path_to_data = "/media/zebrafish/Data2/Arman/Data/LB_dataset";
-Path_to_save = "/media/zebrafish/Data2/Arman/Data/LB_dataset/NoBias/0.15";
-Path_to_save_imgs = "/media/zebrafish/Data2/Arman/Data/LB_dataset/NoBias/0.15/imgs";
+Path_to_save = "/media/zebrafish/Data2/Arman/Data/LB_dataset/NewRun";
+Path_to_save_imgs = "/media/zebrafish/Data2/Arman/Data/LB_dataset/NewRun/imgs";
 
 % threshold of activity for labelling (default 20%)
 act_thresh = 0.15;
