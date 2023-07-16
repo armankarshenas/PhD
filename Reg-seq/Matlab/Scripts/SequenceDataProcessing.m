@@ -31,7 +31,7 @@ sequences.Properties.VariableNames{'Var8'} = 'Header';
 sequences(any(ismissing(sequences),2),:) = [];
 
 % Label the dataset
-sequences = RNASeqLabel(sequences,act_thresh);
+sequences = RNA_DNASeqLabel(sequences,act_thresh);
 
 % Partitioning the dataset
 [tb_test,tb_train,tb_val] = PartitionDataSet(train_f,test_f,sequences);
@@ -40,17 +40,17 @@ cd(Path_to_save)
 % Training data
 fastawrite("Train_sequences.fa",string(tb_train.Header(:)),string(tb_train.sequence(:)));
 writetable(tb_train,"Train_activity.txt");
-Train_label = [table2array(tb_train(:,width(tb_train)-1)) table2array(tb_train(:,width(tb_train)))];
+Train_label = table2array(tb_train(:,width(tb_train)));
 save("Train_label.mat",'Train_label');
 % Testing data 
 fastawrite("Test_sequences.fa",string(tb_test.Header(:)),string(tb_test.sequence(:)));
 writetable(tb_test,"Test_activity.txt");
-Test_label = [table2array(tb_test(:,width(tb_test)-1)) table2array(tb_test(:,width(tb_train)))];
+Test_label = table2array(tb_test(:,width(tb_train)));
 save("Test_label.mat",'Test_label');
 % Validation data
 fastawrite("Valid_sequences.fa",string(tb_val.Header(:)),string(tb_val.sequence(:)));
 writetable(tb_val,"Valid_activity.txt");
-Valid_label = [table2array(tb_val(:,width(tb_val)-1)) table2array(tb_val(:,width(tb_val)))];
+Valid_label = table2array(tb_val(:,width(tb_val)));
 save("Valid_label.mat",'Valid_label');
 
 
